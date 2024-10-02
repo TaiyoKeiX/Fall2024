@@ -71,6 +71,11 @@
     <comp lib="1" loc="(570,990)" name="NAND Gate"/>
     <comp lib="1" loc="(660,400)" name="NAND Gate"/>
     <comp lib="1" loc="(660,550)" name="NAND Gate"/>
+    <comp lib="4" loc="(1150,400)" name="D Flip-Flop">
+      <a name="appearance" val="logisim_evolution"/>
+    </comp>
+    <comp lib="5" loc="(1080,450)" name="Button"/>
+    <comp lib="5" loc="(1300,410)" name="LED"/>
     <comp lib="5" loc="(140,300)" name="LED">
       <a name="facing" val="south"/>
       <a name="label" val="ButtonLED"/>
@@ -91,15 +96,25 @@
     <comp lib="8" loc="(455,365)" name="Text">
       <a name="text" val="7400"/>
     </comp>
-    <comp lib="8" loc="(992,668)" name="Text">
+    <comp lib="8" loc="(990,665)" name="Text">
       <a name="text" val="7474"/>
     </comp>
+    <wire from="(1080,450)" to="(1140,450)"/>
+    <wire from="(1140,360)" to="(1140,410)"/>
+    <wire from="(1140,360)" to="(1240,360)"/>
+    <wire from="(1200,410)" to="(1300,410)"/>
+    <wire from="(1200,450)" to="(1240,450)"/>
+    <wire from="(1240,360)" to="(1240,450)"/>
+    <wire from="(1280,510)" to="(1280,720)"/>
+    <wire from="(1280,510)" to="(1370,510)"/>
+    <wire from="(1370,470)" to="(1370,510)"/>
     <wire from="(140,300)" to="(140,380)"/>
     <wire from="(140,380)" to="(180,380)"/>
+    <wire from="(1490,510)" to="(1510,510)"/>
     <wire from="(170,1010)" to="(170,1020)"/>
     <wire from="(170,1010)" to="(250,1010)"/>
+    <wire from="(170,720)" to="(1280,720)"/>
     <wire from="(170,720)" to="(170,840)"/>
-    <wire from="(170,720)" to="(810,720)"/>
     <wire from="(170,840)" to="(170,1010)"/>
     <wire from="(170,840)" to="(310,840)"/>
     <wire from="(180,380)" to="(180,550)"/>
@@ -168,6 +183,8 @@
     <wire from="(770,400)" to="(810,400)"/>
     <wire from="(770,550)" to="(770,610)"/>
     <wire from="(80,380)" to="(140,380)"/>
-    <wire from="(810,400)" to="(810,720)"/>
+    <wire from="(800,560)" to="(810,560)"/>
+    <wire from="(810,400)" to="(810,560)"/>
+    <wire from="(810,560)" to="(810,570)"/>
   </circuit>
 </project>

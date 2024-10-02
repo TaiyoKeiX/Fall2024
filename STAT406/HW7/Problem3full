@@ -1,0 +1,40 @@
+# Re-run the analysis using the updated dataset with 16 observations.
+import numpy as np
+import pandas as pd
+import statsmodels.api as sm
+import matplotlib.pyplot as plt
+# Define the new dataset with all 16 observations based on the uploaded image
+
+# Convert to DataFrame
+df_new = pd.read_excel(r'c:\Users\ssjed\OneDrive\Documents\GitHub\Fall-2024\STAT406\HW7\hw7_q3.xlsx')
+
+# Add a constant for the intercept
+X_new = df_new[['A', 'B', 'C', 'D', 'E', 'G', 'F']]
+X_new = sm.add_constant(X_new)  # Adds the intercept term to the model
+y_new = df_new['y']
+
+# Fit the model using Ordinary Least Squares (OLS)
+model_new = sm.OLS(y_new, X_new)
+results_new = model_new.fit()
+
+# Print the summary of the model to see the coefficients and significance levels
+model_summary_new = results_new.summary()
+
+# Calculate residuals and plot the residual by predicted plot
+y_pred_new = results_new.predict(X_new)
+residuals_new = y_new - y_pred_new
+
+# Plot Residual by Predicted Values
+plt.scatter(y_pred_new, residuals_new)
+plt.axhline(y=0, color='r', linestyle='--')
+plt.xlabel('Predicted Values')
+plt.ylabel('Residuals')
+plt.title('Residual by Predicted Plot (Updated Dataset)')
+plt.show()
+
+# Report adjusted R-squared
+adjusted_r_squared_new = results_new.rsquared_adj
+
+(model_summary_new, adjusted_r_squared_new)
+
+print(results_new.summary())

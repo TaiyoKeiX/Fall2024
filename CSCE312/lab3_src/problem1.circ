@@ -71,10 +71,10 @@
     <comp lib="1" loc="(660,290)" name="NAND Gate"/>
     <comp lib="1" loc="(660,440)" name="NAND Gate"/>
     <comp lib="1" loc="(970,510)" name="NAND Gate"/>
-    <comp lib="8" loc="(1101,566)" name="Text">
+    <comp lib="8" loc="(1100,565)" name="Text">
       <a name="text" val="Servant"/>
     </comp>
-    <comp lib="8" loc="(354,556)" name="Text">
+    <comp lib="8" loc="(350,555)" name="Text">
       <a name="text" val="Master"/>
     </comp>
     <wire from="(1020,360)" to="(1020,410)"/>

@@ -59,36 +59,47 @@ tree4 = Branch "A"
 ---------------
 
 -- Problem 2 (15 points)
-instance (Show a, Show b) => Show (Tree a b) where
-   show :: (Show a, Show b) => Tree a b -> String
-   show tree = showHelper tree 0 
-      where
-        showHelper :: (Show a, Show b) => Tree a b -> Int -> String
-        showHelper (Leaf x) indent = replicate indent ' ' ++ "Leaf " ++ show x
-        showHelper (Branch y left right) indent =
-            replicate indent ' ' ++ "Branch " ++ show y ++ "\n" ++
-            showHelper left (indent + 2) ++ "\n" ++
-            showHelper right (indent + 2)
-
+instance (Show a, Show b) => Show (Tree a b) where                                                  -- Declare the instance of Show for Tree a b
+   show :: (Show a, Show b) => Tree a b -> String                                                   -- Define the show function for Tree a b
+   show tree = showHelper tree 0                                                                    -- Call the showHelper function with the tree object and 0 as arguments
+      where                                                                                         -- Define the showHelper function
+        showHelper :: (Show a, Show b) => Tree a b -> Int -> String                                 -- Define the showHelper function with a Tree object and an integer as arguments
+        showHelper (Leaf x) indent = replicate indent ' ' ++ "Leaf " ++ show x                      -- If the current node is a Leaf node, return the string "Leaf " followed by the value of the Leaf node
+        showHelper (Branch y left right) indent =                                                   -- If the current node is a Branch node
+            replicate indent ' ' ++ "Branch " ++ show y ++ "\n" ++                                  -- Return the string "Branch " followed by the value of the Branch node
+            showHelper left (indent + 2) ++ "\n" ++                                                 -- Recursively call the showHelper function on the left subtree of the current node, incrementing the indent by 2
+            showHelper right (indent + 2)                                                           -- Recursively call the showHelper function on the right subtree of the current node, incrementing the indent by 2
+{--
+Explanation:
+The show function is defined for the Tree data type. The showHelper function is a helper function 
+that takes a Tree object and an integer as arguments. The integer represents the number of spaces to 
+indent the current line. The showHelper function is a recursive function that traverses the Tree object
+and builds a string representation of the Tree object. If the current node is a Leaf node, the function 
+returns the string "Leaf " followed by the value of the Leaf node. If the current node is a Branch node, the 
+function returns the string "Branch " followed by the value of the Branch node. The function then recursively calls 
+itself on the left and right subtrees of the current node, incrementing the indent by 2 for each recursive call. The
+function concatenates the string representations of the left and right subtrees with the current node's string 
+representation and returns the result.
+--}
 
 -- Problem 3 (15 + 10 = 25 points)
 ---- Problem 3.1 (5 + 5 + 5 = 15 points)
-preorder  :: (a -> c) -> (b -> c) -> Tree a b -> [c]  -- 5 points
-preorder fLeaf fBranch (Leaf x) = [fLeaf x]
-preorder fLeaf fBranch (Branch y left right) =
-    [fBranch y] ++ preorder fLeaf fBranch left ++ preorder fLeaf fBranch right
+preorder  :: (a -> c) -> (b -> c) -> Tree a b -> [c]                           -- Define the preorder function
+preorder fLeaf fBranch (Leaf x) = [fLeaf x]                                    -- Base case: If the current node is a Leaf node, return a list containing the value of the Leaf node
+preorder fLeaf fBranch (Branch y left right) =                                 -- Recursive case: If the current node is a Branch node
+    [fBranch y] ++ preorder fLeaf fBranch left ++ preorder fLeaf fBranch right -- Return a list containing the value of the Branch node followed by the results of recursively calling the preorder function on the left and right subtrees of the current node
 
 
-inorder   :: (a -> c) -> (b -> c) -> Tree a b -> [c]  -- 5 points
-inorder fLeaf fBranch (Leaf x) = [fLeaf x]
-inorder fLeaf fBranch (Branch y left right) =
-    inorder fLeaf fBranch left ++ [fBranch y] ++ inorder fLeaf fBranch right
+inorder   :: (a -> c) -> (b -> c) -> Tree a b -> [c]                            -- Define the inorder function
+inorder fLeaf fBranch (Leaf x) = [fLeaf x]                                      -- Base case: If the current node is a Leaf node, return a list containing the value of the Leaf node
+inorder fLeaf fBranch (Branch y left right) =                                   -- Recursive case: If the current node is a Branch node
+    inorder fLeaf fBranch left ++ [fBranch y] ++ inorder fLeaf fBranch right    -- Return the results of recursively calling the inorder function on the left subtree of the current node, followed by a list containing the value of the Branch node, followed by the results of recursively calling the inorder function on the right subtree of the current node
 
 
-postorder  :: (a -> c) -> (b -> c) -> Tree a b -> [c]  -- 5 points
-postorder fLeaf fBranch (Leaf x) = [fLeaf x]
-postorder fLeaf fBranch (Branch y left right) =
-    postorder fLeaf fBranch left ++ postorder fLeaf fBranch right ++ [fBranch y] 
+postorder  :: (a -> c) -> (b -> c) -> Tree a b -> [c]                                 -- Define the postorder function
+postorder fLeaf fBranch (Leaf x) = [fLeaf x]                                          -- Base case: If the current node is a Leaf node, return a list containing the value of the Leaf node
+postorder fLeaf fBranch (Branch y left right) =                                       -- Recursive case: If the current node is a Branch node
+    postorder fLeaf fBranch left ++ postorder fLeaf fBranch right ++ [fBranch y]      -- Return the results of recursively calling the postorder function on the left subtree of the current node, followed by the results of recursively calling the postorder function on the right subtree of the current node, followed by a list containing the value of the Branch node
 
 
 ---- Problem 3.2 (10 points)

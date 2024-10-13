@@ -450,6 +450,12 @@
       <a name="output" val="true"/>
       <a name="width" val="8"/>
     </comp>
+    <comp lib="0" loc="(650,700)" name="Pin">
+      <a name="appearance" val="classic"/>
+      <a name="facing" val="west"/>
+      <a name="output" val="true"/>
+      <a name="width" val="8"/>
+    </comp>
     <comp lib="0" loc="(750,650)" name="Pin">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
@@ -570,12 +576,14 @@
     <wire from="(50,490)" to="(280,490)"/>
     <wire from="(50,490)" to="(50,690)"/>
     <wire from="(50,690)" to="(420,690)"/>
-    <wire from="(550,520)" to="(640,520)"/>
+    <wire from="(550,500)" to="(640,500)"/>
     <wire from="(550,670)" to="(600,670)"/>
     <wire from="(600,630)" to="(600,670)"/>
-    <wire from="(640,480)" to="(640,520)"/>
+    <wire from="(600,670)" to="(600,700)"/>
+    <wire from="(600,700)" to="(650,700)"/>
+    <wire from="(640,480)" to="(640,500)"/>
     <wire from="(640,480)" to="(720,480)"/>
-    <wire from="(640,520)" to="(640,650)"/>
+    <wire from="(640,500)" to="(640,650)"/>
     <wire from="(640,650)" to="(750,650)"/>
     <wire from="(700,440)" to="(700,450)"/>
     <wire from="(700,440)" to="(720,440)"/>

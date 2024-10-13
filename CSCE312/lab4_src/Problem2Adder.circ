@@ -331,12 +331,6 @@
     <a name="circuit" val="Inverter"/>
     <a name="circuitnamedboxfixedsize" val="true"/>
     <a name="simulationFrequency" val="1.0"/>
-    <comp lib="0" loc="(1130,350)" name="Pin">
-      <a name="appearance" val="classic"/>
-      <a name="facing" val="west"/>
-      <a name="label" val="Sign"/>
-      <a name="output" val="true"/>
-    </comp>
     <comp lib="0" loc="(1170,520)" name="Pin">
       <a name="appearance" val="classic"/>
       <a name="facing" val="west"/>
@@ -346,10 +340,6 @@
     <comp lib="0" loc="(190,410)" name="Pin">
       <a name="appearance" val="classic"/>
       <a name="width" val="8"/>
-    </comp>
-    <comp lib="0" loc="(290,360)" name="Splitter">
-      <a name="fanout" val="8"/>
-      <a name="incoming" val="8"/>
     </comp>
     <comp lib="0" loc="(310,510)" name="Pin">
       <a name="appearance" val="classic"/>
@@ -371,19 +361,14 @@
       <a name="width" val="8"/>
     </comp>
     <comp loc="(700,490)" name="EightBitAdder"/>
-    <wire from="(1010,350)" to="(1010,600)"/>
-    <wire from="(1010,350)" to="(1130,350)"/>
     <wire from="(1060,410)" to="(1060,510)"/>
     <wire from="(1060,510)" to="(1070,510)"/>
     <wire from="(1080,540)" to="(1080,800)"/>
     <wire from="(1100,520)" to="(1170,520)"/>
     <wire from="(190,410)" to="(220,410)"/>
-    <wire from="(220,360)" to="(220,410)"/>
-    <wire from="(220,360)" to="(290,360)"/>
     <wire from="(220,410)" to="(1060,410)"/>
     <wire from="(220,410)" to="(220,490)"/>
     <wire from="(220,490)" to="(330,490)"/>
-    <wire from="(310,350)" to="(1010,350)"/>
     <wire from="(310,510)" to="(480,510)"/>
     <wire from="(360,490)" to="(480,490)"/>
     <wire from="(370,530)" to="(460,530)"/>

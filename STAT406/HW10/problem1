@@ -1,0 +1,52 @@
+from scipy.stats import norm
+from statsmodels.stats.power import NormalIndPower
+
+# Given values
+effect_size = 22
+std_dev = 190
+alpha = 0.03
+power = 0.90
+
+# Z-scores for alpha/2 and power
+z_alpha = norm.ppf(1 - alpha / 2)
+z_beta = norm.ppf(power)
+
+# Calculate required sample size
+n = ((z_alpha + z_beta) * (std_dev / effect_size)) ** 2
+
+print(f"Required sample size: {n:.2f}")
+
+# Parameters
+alpha = 0.03
+power = 0.90
+std_dev = 190
+effect_size = 30 / std_dev  # Effect size as a ratio
+
+# Create power analysis object
+analysis = NormalIndPower()
+
+# Calculate the sample size required
+sample_size = analysis.solve_power(effect_size=effect_size, alpha=alpha, power=power, alternative='two-sided')
+
+print(f"Required Sample Size: {sample_size:.2f}")
+
+from statsmodels.stats.power import zt_ind_solve_power
+
+# Parameters
+p0 = 0.15  # Historical proportion
+p1 = 0.30  # Target proportion
+alpha = 0.01  # Significance level
+nobs = 75  # Sample size
+
+# Effect size (difference in proportions)
+effect_size = p1 - p0
+
+# Calculate power
+power = zt_ind_solve_power(
+    effect_size=effect_size,
+    nobs1=nobs,
+    alpha=alpha,
+    alternative='two-sided'
+)
+
+print(f"Statistical power: {power:.4f}")

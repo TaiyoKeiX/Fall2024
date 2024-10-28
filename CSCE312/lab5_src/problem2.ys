@@ -1,0 +1,30 @@
+    # Initialize j = 3 and k = 2
+    irmovq $3, %rbx      # j in %rbx
+    irmovq $2, %rcx      # k in %rcx
+
+    # Initialize i = 0
+    irmovq $0, %rax      # i in %rax
+
+loop:
+    # Check if i < 5
+    irmovq $5, %r8
+    cmpq %r8, %rax       # Compare i with 5
+    jge done             # If i >= 5, exit loop
+
+    # j = i * 2
+    rrmovq %rax, %rdx    # Copy i to %rdx
+    addq %rdx, %rdx      # %rdx = i * 2 (j)
+
+    # k = j + 1
+    irmovq $1, %r9       # Load 1 into %r9
+    addq %rdx, %r9       # %r9 = j + 1 (k)
+    rrmovq %r9, %rcx     # Store the result in %rcx (k)
+
+    # Increment i (i++)
+    addq $1, %rax
+
+    # Repeat the loop
+    jmp loop
+
+done:
+    halt                 # End of program

@@ -1,19 +1,18 @@
-                            |     # Initialize i and j
-0x000: 30f00a00000000000000 |     irmovq $10, %rax     # i = 10, stored in %rax
-0x00a: 30f30600000000000000 |     irmovq $6, %rbx      # j = 6, stored in %rbx
+0x000: 30f00a00000000000000 |     irmovq $10, %rax        # i = 10 (stored in %rax)
+0x00a: 30f30600000000000000 |     irmovq $6, %rbx         # j = 6 (stored in %rbx)
                             | 
-                            |     # Compare i <= j
-0x014: 6130                 |     subq %rbx, %rax      # %rax = i - j (compare)
-0x016: 713e00000000000000   |     jle if_body          # If i <= j, jump to if_body
+0x014: 6130                 |     subq %rbx, %rax         # Compare i and j (i - j)
+0x016: 763400000000000000   |     jg else_body            # If i > j, jump to else_body
                             | 
-0x01f:                      | else_body:
-0x01f: 30f00100000000000000 |     irmovq $1, %rax      # i = 1
-0x029: 30f80100000000000000 |     irmovq $1, %r8      # k = 1
-0x035: 705400000000000000   |     jmp done             # Jump to end
+0x01f:                      | if_body:
+0x01f: 30f20200000000000000 |     irmovq $2, %rdx         # Load 2 into %rdx
+0x029: 6020                 |     addq %rdx, %rax         # i = i + 2
+0x02b: 704a00000000000000   |     jmp done                # Skip else_body
                             | 
-0x03e:                      | if_body:
-0x03e: 30f00a00000000000000 |     irmovq $10, %rax     # Restore i (if we jump here)
-0x048: 30f80200000000000000 |     irmovq $2, %r8      # k = 2
+0x034:                      | else_body:
+0x034: 30f00100000000000000 |     irmovq $1, %rax         # i = 1
+0x03e: 30f20100000000000000 |     irmovq $1, %rdx         # Load 1 into %rdx
+0x048: 6023                 |     addq %rdx, %rbx         # j++
                             | 
-0x054:                      | done:
-0x054: 00                   |     halt                 # End of program
+0x04a:                      | done:
+0x04a: 00                   |     halt                    # End of program

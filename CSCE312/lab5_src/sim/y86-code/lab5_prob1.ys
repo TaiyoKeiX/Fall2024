@@ -1,21 +1,19 @@
-    # Initialize i and j
-    irmovq $10, %rax     # i = 10, stored in %rax
-    irmovq $6, %rbx      # j = 6, stored in %rbx
+ start: 
+    irmovq $10, %rax        # i = 10 (stored in %rax)
+    irmovq $6, %rbx         # j = 6 (stored in %rbx)
 
-    # Compare i <= j
-    subq %rbx, %rax      # %rax = i - j (compare)
-    jle if_body          # If i <= j, jump to if_body
-
-else_body:
-    irmovq $1, %rax      # i = 1
-    irmovq $1, %r8      # k = 1
-    addq $r8, %rbx        # j++
-    jmp done             # Jump to end
+    subq %rbx, %rax         # Compare i and j (i - j)
+    jg else_body            # If i > j, jump to else_body
 
 if_body:
-    irmovq $10, %rax     # Restore i (if we jump here)
-    irmovq $2, %r8      # k = 2
-    addq $r8, %rax        # i = i + 2
+    irmovq $2, %rdx         # Load 2 into %rdx
+    addq %rdx, %rax         # i = i + 2
+    jmp done                # Skip else_body
+
+else_body:
+    irmovq $1, %rax         # i = 1
+    irmovq $1, %rdx         # Load 1 into %rdx
+    addq %rdx, %rbx         # j++
 
 done:
-    halt                 # End of program
+    halt                    # End of program

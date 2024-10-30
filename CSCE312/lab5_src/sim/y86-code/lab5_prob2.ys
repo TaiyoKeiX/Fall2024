@@ -8,8 +8,8 @@
 loop:
     # Check if i < 5
     irmovq $5, %r8
-    cmpq %r8, %rax       # Compare i with 5
-    jge done             # If i >= 5, exit loop
+    subq %r8, %rax       # Compare i with 5
+    jg done             # If i >= 5, exit loop
 
     # j = i * 2
     rrmovq %rax, %rdx    # Copy i to %rdx

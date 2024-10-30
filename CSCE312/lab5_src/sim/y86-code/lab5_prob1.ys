@@ -8,12 +8,14 @@
 
 else_body:
     irmovq $1, %rax      # i = 1
-    addq $1, %rbx        # j++
+    irmovq $1, %r8      # k = 1
+    addq $r8, %rbx        # j++
     jmp done             # Jump to end
 
 if_body:
     irmovq $10, %rax     # Restore i (if we jump here)
-    addq $2, %rax        # i = i + 2
+    irmovq $2, %r8      # k = 2
+    addq $r8, %rax        # i = i + 2
 
 done:
     halt                 # End of program

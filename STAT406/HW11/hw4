@@ -1,0 +1,44 @@
+import pandas as pd
+import statsmodels.formula.api as smf
+
+# Load the dataset
+df = pd.read_excel(r'c:\Users\ssjed\OneDrive\Documents\GitHub\Fall2024\STAT406\HW11\Plant_Data_2010.xlsx')   # Update the path if needed
+
+# Rename columns for clarity
+df_clean = df.rename(columns={
+    'Floodplain type': 'Floodplain',
+    'Transpiration (mmol H2O m-2 s-1)': 'Transpiration',
+    'clay %': 'Clay'
+})
+
+# Fit the adjusted model: Transpiration ~ Clay + Floodplain (no interaction)
+adjusted_model = smf.ols('Transpiration ~ Clay + Floodplain', data=df_clean).fit()
+
+# Extract model parameters and statistics
+coefficients = adjusted_model.params
+p_values = adjusted_model.pvalues
+confidence_intervals = adjusted_model.conf_int(alpha=0.05)
+
+# Intercepts and slopes
+intercept_A = coefficients['Intercept']  # Intercept for Floodplain A
+slope_clay = coefficients['Clay']  # Shared slope for Clay%
+intercept_B = intercept_A + coefficients['Floodplain[T.B]']  # Intercept for Floodplain B
+
+# Predicted transpiration rate for Floodplain B at 21% Clay
+predicted_transpiration_B_21 = intercept_B + slope_clay * 21
+
+# Confidence interval for the mean difference between Floodplain A and B
+ci_lower, ci_upper = confidence_intervals.loc['Floodplain[T.B]']
+
+# P-values for Clay and Floodplain coefficients
+p_value_clay = p_values['Clay']
+p_value_floodplain = p_values['Floodplain[T.B]']
+
+# Print the results
+print(f"Intercept for A: {intercept_A}")
+print(f"Slope for Clay: {slope_clay}")
+print(f"Intercept for B: {intercept_B}")
+print(f"Predicted Transpiration for B at 21% Clay: {predicted_transpiration_B_21}")
+print(f"P-value for Clay: {p_value_clay}")
+print(f"P-value for Floodplain: {p_value_floodplain}")
+print(f"95% CI for Mean Difference (A - B): ({ci_lower}, {ci_upper})")

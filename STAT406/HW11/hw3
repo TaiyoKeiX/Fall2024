@@ -1,0 +1,52 @@
+import pandas as pd
+import statsmodels.formula.api as smf
+from scipy.stats import t
+
+# Load the dataset
+df = pd.read_excel(r'c:\Users\ssjed\OneDrive\Documents\GitHub\Fall2024\STAT406\HW11\Plant_Data_2010.xlsx') 
+
+# Rename columns for clarity
+df_clean = df.rename(columns={
+    'Floodplain type': 'Floodplain',
+    'Transpiration (mmol H2O m-2 s-1)': 'Transpiration',
+    'clay %': 'Clay'
+})
+
+# Fit the adjusted ANCOVA model: Transpiration ~ Clay + Floodplain (without interaction)
+adjusted_model = smf.ols('Transpiration ~ Clay + Floodplain', data=df_clean).fit()
+
+# Function to calculate the p-value for a specific clay level
+def calculate_p_value_for_clay_level(model, clay_value):
+    # Design matrices for Floodplain A and B at the given clay value
+    X_A = [1, clay_value, 0]  # Floodplain A
+    X_B = [1, clay_value, 1]  # Floodplain B
+
+    # Calculate predicted means for A and B
+    pred_A = sum([coef * val for coef, val in zip(model.params, X_A)])
+    pred_B = sum([coef * val for coef, val in zip(model.params, X_B)])
+
+    # Difference in predictions
+    diff = pred_A - pred_B
+
+    # Standard error of the difference
+    cov_matrix = model.cov_params()
+    var_diff = sum((X_A[i] - X_B[i])**2 * cov_matrix.iloc[i, i] for i in range(len(X_A)))
+    std_err_diff = var_diff**0.5
+
+    # Calculate t-statistic and two-tailed p-value
+    t_stat = diff / std_err_diff
+    p_value = 2 * (1 - t.cdf(abs(t_stat), df=model.df_resid))
+
+    return {
+        "Difference": diff,
+        "T-Statistic": t_stat,
+        "P-Value": p_value
+    }
+
+# Calculate p-values for clay% = 20 and 40
+results_20 = calculate_p_value_for_clay_level(adjusted_model, 20)
+results_40 = calculate_p_value_for_clay_level(adjusted_model, 40)
+
+# Print the results
+print(f"Results for Clay% = 20: {results_20}")
+print(f"Results for Clay% = 40: {results_40}")

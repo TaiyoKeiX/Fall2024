@@ -1,0 +1,38 @@
+import pandas as pd
+import statsmodels.formula.api as smf
+
+# Load your dataset
+df = pd.read_excel(r'c:\Users\ssjed\OneDrive\Documents\GitHub\Fall2024\STAT406\HW11\Plant_Data_2010.xlsx')  # Update path if necessary
+df_clean = df.rename(columns={'Floodplain type': 'Floodplain', 
+                              'Transpiration (mmol H2O m-2 s-1)': 'Transpiration', 
+                              'clay %': 'Clay'})
+
+# Fit the adjusted model: Transpiration ~ Clay + Floodplain (no interaction)
+adjusted_model = smf.ols('Transpiration ~ Clay + Floodplain', data=df_clean).fit()
+
+# Extract coefficients
+intercept_A_adj = adjusted_model.params['Intercept']
+slope_adj = adjusted_model.params['Clay']
+intercept_B_adj = intercept_A_adj + adjusted_model.params['Floodplain[T.B]']
+
+# Predict transpiration for Floodplain B at 21% Clay
+predicted_transpiration_B_21 = intercept_B_adj + slope_adj * 0.21
+
+# Extract p-values
+p_value_clay = adjusted_model.pvalues['Clay']
+p_value_floodplain = adjusted_model.pvalues['Floodplain[T.B]']
+
+# 95% Confidence Interval for mean difference (A - B)
+mean_diff = adjusted_model.params['Floodplain[T.B]']
+se_diff = adjusted_model.bse['Floodplain[T.B]']
+ci_lower = mean_diff - 1.96 * se_diff
+ci_upper = mean_diff + 1.96 * se_diff
+
+# Print results
+print(f"Intercept for A (adjusted): {intercept_A_adj}")
+print(f"Slope (adjusted): {slope_adj}")
+print(f"Intercept for B (adjusted): {intercept_B_adj}")
+print(f"Predicted Transpiration for B at 21% Clay: {predicted_transpiration_B_21}")
+print(f"P-value for Clay: {p_value_clay}")
+print(f"P-value for Floodplain: {p_value_floodplain}")
+print(f"95% CI for mean difference (A - B): ({ci_lower}, {ci_upper})")

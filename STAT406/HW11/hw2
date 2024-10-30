@@ -1,0 +1,48 @@
+import pandas as pd
+import statsmodels.formula.api as smf
+from scipy.stats import t
+
+# Reload the dataset to ensure it's accessible
+file_path = "/mnt/data/Plant_Data_2010.xlsx"
+df = pd.read_excel(r'c:\Users\ssjed\OneDrive\Documents\GitHub\Fall2024\STAT406\HW11\Plant_Data_2010.xlsx') 
+
+# Clean column names for consistency
+df_clean = df.rename(columns={
+    'Floodplain type': 'Floodplain',
+    'Transpiration (mmol H2O m-2 s-1)': 'Transpiration',
+    'clay %': 'Clay'
+})
+
+# Fit the adjusted model without interaction: Transpiration ~ Clay + Floodplain
+adjusted_model = smf.ols('Transpiration ~ Clay + Floodplain', data=df_clean).fit()
+
+# Extract model parameters and relevant statistics
+coefficients = adjusted_model.params
+se_coefficients = adjusted_model.bse
+df_residuals = adjusted_model.df_resid  # Degrees of freedom for residuals
+
+# Calculate the difference in means (Floodplain A - Floodplain B)
+mean_diff = coefficients['Floodplain[T.B]']
+se_diff = se_coefficients['Floodplain[T.B]']
+
+# Calculate the t-statistic for the difference
+t_statistic = mean_diff / se_diff
+
+# Calculate two-tailed p-value
+p_value_two_tailed = 2 * (1 - t.cdf(abs(t_statistic), df=df_residuals))
+
+# 95% Confidence Interval for mean difference (A - B)
+ci_lower = mean_diff - 1.96 * se_diff
+ci_upper = mean_diff + 1.96 * se_diff
+
+# Output the results
+{
+    "T-Statistic": t_statistic,
+    "P-Value (Two-Tailed)": p_value_two_tailed,
+    "95% CI for Mean Difference (A - B)": (ci_lower, ci_upper),
+    "Degrees of Freedom": df_residuals
+}
+print("T-Statistic:", t_statistic)
+print("P-Value (Two-Tailed):", p_value_two_tailed)
+print("95% CI for Mean Difference (A - B):", (ci_lower, ci_upper))
+print("Degrees of Freedom:", df_residuals)

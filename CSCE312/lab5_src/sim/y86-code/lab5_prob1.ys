@@ -1,3 +1,4 @@
+    .pos 0
  start: 
     irmovq $10, %rax        # i = 10 (stored in %rax)
     irmovq $6, %rbx         # j = 6 (stored in %rbx)

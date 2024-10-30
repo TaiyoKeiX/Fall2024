@@ -1,30 +1,31 @@
-    # Initialize j = 3 and k = 2
-    irmovq $3, %rbx      # j in %rbx
-    irmovq $2, %rcx      # k in %rcx
-
-    # Initialize i = 0
-    irmovq $0, %rax      # i in %rax
+    .pos 0
+start:
+    irmovq $3, %rbx         # j = 3 (in %rbx)
+    irmovq $2, %rcx         # k = 2 (in %rcx)
+    irmovq $0, %rax         # i = 0 (in %rax)
 
 loop:
-    # Check if i < 5
-    irmovq $5, %r8
-    subq %r8, %rax       # Compare i with 5
-    jg done             # If i >= 5, exit loop
+    irmovq $5, %r8          # Set loop limit (5) in %r8
+    subq %rax, %r8          # 5 - i
+    jle done                # If i >= 5, exit loop
 
     # j = i * 2
-    rrmovq %rax, %rdx    # Copy i to %rdx
-    addq %rdx, %rdx      # %rdx = i * 2 (j)
+    rrmovq %rax, %rdx       # Copy i to %rdx
+    addq %rdx, %rdx         # j = i * 2 (stored in %rdx)
+    rrmovq %rdx, %rbx       # Store result in j (%rbx)
 
     # k = j + 1
-    irmovq $1, %r9       # Load 1 into %r9
-    addq %rdx, %r9       # %r9 = j + 1 (k)
-    rrmovq %r9, %rcx     # Store the result in %rcx (k)
+    irmovq $1, %r9          # Load 1 into %r9
+    addq %rbx, %r9          # k = j + 1
+    rrmovq %r9, %rcx        # Store result in k (%rcx)
 
-    # Increment i (i++)
-    addq $1, %rax
+    # Increment i
+    irmovq $1, %r8   # Load 1 into temporary register %r8
+    addq %r8, %rax   # Add 1 to %rax (i++)
 
-    # Repeat the loop
+
+    # Jump back to start of the loop
     jmp loop
 
 done:
-    halt                 # End of program
+    halt                    # End of the program

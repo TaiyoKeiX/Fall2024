@@ -1,29 +1,31 @@
-                            |     # Initialize j = 3 and k = 2
-0x000: 30f30300000000000000 |     irmovq $3, %rbx      # j in %rbx
-0x00a: 30f10200000000000000 |     irmovq $2, %rcx      # k in %rcx
-                            | 
-                            |     # Initialize i = 0
-0x014: 30f00000000000000000 |     irmovq $0, %rax      # i in %rax
+0x000:                      |     .pos 0
+0x000:                      | start:
+0x000: 30f30300000000000000 |     irmovq $3, %rbx         # j = 3 (in %rbx)
+0x00a: 30f10200000000000000 |     irmovq $2, %rcx         # k = 2 (in %rcx)
+0x014: 30f00000000000000000 |     irmovq $0, %rax         # i = 0 (in %rax)
                             | 
 0x01e:                      | loop:
-                            |     # Check if i < 5
-0x01e: 30f80500000000000000 |     irmovq $5, %r8
-0x028: 6180                 |     subq %r8, %rax       # Compare i with 5
-0x02a: 765000000000000000   |     jg done             # If i >= 5, exit loop
+0x01e: 30f80500000000000000 |     irmovq $5, %r8          # Set loop limit (5) in %r8
+0x028: 6108                 |     subq %rax, %r8          # 5 - i
+0x02a: 715c00000000000000   |     jle done                # If i >= 5, exit loop
                             | 
                             |     # j = i * 2
-0x033: 2002                 |     rrmovq %rax, %rdx    # Copy i to %rdx
-0x035: 6022                 |     addq %rdx, %rdx      # %rdx = i * 2 (j)
+0x033: 2002                 |     rrmovq %rax, %rdx       # Copy i to %rdx
+0x035: 6022                 |     addq %rdx, %rdx         # j = i * 2 (stored in %rdx)
+0x037: 2023                 |     rrmovq %rdx, %rbx       # Store result in j (%rbx)
                             | 
                             |     # k = j + 1
-0x037: 30f90100000000000000 |     irmovq $1, %r9       # Load 1 into %r9
-0x041: 6029                 |     addq %rdx, %r9       # %r9 = j + 1 (k)
-0x043: 2091                 |     rrmovq %r9, %rcx     # Store the result in %rcx (k)
+0x039: 30f90100000000000000 |     irmovq $1, %r9          # Load 1 into %r9
+0x043: 6039                 |     addq %rbx, %r9          # k = j + 1
+0x045: 2091                 |     rrmovq %r9, %rcx        # Store result in k (%rcx)
                             | 
-                            |     # Increment i (i++)
+                            |     # Increment i
+0x047: 30f80100000000000000 |     irmovq $1, %r8   # Load 1 into temporary register %r8
+0x051: 6080                 |     addq %r8, %rax   # Add 1 to %rax (i++)
                             | 
-                            |     # Repeat the loop
-0x047: 701e00000000000000   |     jmp loop
                             | 
-0x050:                      | done:
-0x050: 00                   |     halt                 # End of program
+                            |     # Jump back to start of the loop
+0x053: 701e00000000000000   |     jmp loop
+                            | 
+0x05c:                      | done:
+0x05c: 00                   |     halt                    # End of the program

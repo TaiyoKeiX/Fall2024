@@ -1,20 +1,24 @@
 0x000:                      |     .pos 0
-0x000:                      |  start: 
-0x000: 30f00a00000000000000 |     irmovq $10, %rax        # i = 10 (stored in %rax)
-0x00a: 30f30600000000000000 |     irmovq $6, %rbx         # j = 6 (stored in %rbx)
+0x000:                      | start:
+                            |     # Initialize i = 10, j = 6
+0x000: 30f00300000000000000 |     irmovq $3, %rax       # i = 10 (in %rax)
+0x00a: 30f30500000000000000 |     irmovq $5, %rbx        # j = 6 (in %rbx)
                             | 
-0x014: 6130                 |     subq %rbx, %rax         # Compare i and j (i - j)
-0x016: 763400000000000000   |     jg else_body            # If i > j, jump to else_body
+                            |     # Compare i and j: i <= j
+0x014: 2002                 |     rrmovq %rax, %rdx      # Copy i into %rdx
+0x016: 6132                 |     subq %rbx, %rdx        # %rdx = i - j
+0x018: 714000000000000000   |     jle if_body            # If i <= j, jump to if_body
                             | 
-0x01f:                      | if_body:
-0x01f: 30f20200000000000000 |     irmovq $2, %rdx         # Load 2 into %rdx
-0x029: 6020                 |     addq %rdx, %rax         # i = i + 2
-0x02b: 704a00000000000000   |     jmp done                # Skip else_body
+0x021:                      | else_body:
+0x021: 30f00100000000000000 |     irmovq $1, %rax        # i = 1
+0x02b: 30f10100000000000000 |     irmovq $1, %rcx        # Load 1 into %rcx
+0x035: 6013                 |     addq %rcx, %rbx        # j++
                             | 
-0x034:                      | else_body:
-0x034: 30f00100000000000000 |     irmovq $1, %rax         # i = 1
-0x03e: 30f20100000000000000 |     irmovq $1, %rdx         # Load 1 into %rdx
-0x048: 6023                 |     addq %rdx, %rbx         # j++
+0x037: 704c00000000000000   |     jmp done               # Skip the if_body
                             | 
-0x04a:                      | done:
-0x04a: 00                   |     halt                    # End of program
+0x040:                      | if_body:
+0x040: 30f10200000000000000 |     irmovq $2, %rcx        # Load 2 into %rcx
+0x04a: 6010                 |     addq %rcx, %rax        # i = i + 2
+                            | 
+0x04c:                      | done:
+0x04c: 00                   |     halt                   # End of program

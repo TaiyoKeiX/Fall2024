@@ -1,7 +1,7 @@
     .pos 0
 start:
-    irmovq $3, %rbx         # j = 3 (in %rbx)
-    irmovq $2, %rcx         # k = 2 (in %rcx)
+    irmovq $5, %rbx         # j = 3 (in %rbx)
+    irmovq $10, %rcx         # k = 2 (in %rcx)
     irmovq $0, %rax         # i = 0 (in %rax)
 
 loop:

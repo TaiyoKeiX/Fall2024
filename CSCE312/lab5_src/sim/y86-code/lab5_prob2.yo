@@ -1,7 +1,7 @@
 0x000:                      |     .pos 0
 0x000:                      | start:
-0x000: 30f30300000000000000 |     irmovq $3, %rbx         # j = 3 (in %rbx)
-0x00a: 30f10200000000000000 |     irmovq $2, %rcx         # k = 2 (in %rcx)
+0x000: 30f30500000000000000 |     irmovq $5, %rbx         # j = 3 (in %rbx)
+0x00a: 30f10a00000000000000 |     irmovq $10, %rcx         # k = 2 (in %rcx)
 0x014: 30f00000000000000000 |     irmovq $0, %rax         # i = 0 (in %rax)
                             | 
 0x01e:                      | loop:

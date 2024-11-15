@@ -1,0 +1,19 @@
+import numpy as np
+from statsmodels.stats.contingency_tables import StratifiedTable
+
+# Data for each region as 2x2 tables
+# Each sub-array represents a 2x2 table in the format: [[>2 children and low income, ≤2 children and low income],
+#                                                      [>2 children and high income, ≤2 children and high income]]
+tables = [
+    np.array([[220, 38], [125, 67]]),  # East
+    np.array([[220, 25], [125, 78]]),  # South
+    np.array([[95, 36], [103, 66]])    # West
+]
+
+# Perform the Mantel-Haenszel test for a common odds ratio across these tables
+stratified_table = StratifiedTable(tables)
+mantel_haenszel_result = stratified_table.test_null_odds()
+
+# Print the test statistic and p-value
+print("Mantel-Haenszel Test Statistic:", mantel_haenszel_result.statistic)
+print("Mantel-Haenszel Test p-value:", mantel_haenszel_result.pvalue)

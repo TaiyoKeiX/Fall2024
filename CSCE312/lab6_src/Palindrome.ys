@@ -1,0 +1,49 @@
+# Create a palindrome by reversing a string and appending it.
+
+    .pos 0
+Original:  .string "abcd"     # Original string
+Reversed:  .space 4           # Space for reversed string
+Palindrome: .space 8          # Space for final palindrome
+Length:    .quad 4            # Length of original string
+
+# Start of program
+    .pos 64
+Main:
+    movq $Original, %rdi      # Load address of Original into %rdi
+    movq $Reversed, %rsi      # Load address of Reversed into %rsi
+    movq $Length, %rdx        # Load length into %rdx
+    movq (%rdx), %rcx         # Load length value into %rcx
+    subq $1, %rcx             # Index starts at length - 1
+
+ReverseLoop:
+    movb (%rdi, %rcx), %al    # Load character Original[length - 1 - i]
+    movb %al, (%rsi)          # Store character into Reversed
+    addq $1, %rsi             # Move to next character in Reversed
+    subq $1, %rcx             # Decrement reverse index
+    jns ReverseLoop           # Repeat if rcx >= 0 (not negative)
+
+    movq $Original, %rdi      # Reset %rdi to Original
+    movq $Reversed, %rsi      # Reset %rsi to Reversed
+    movq $Palindrome, %rdx    # Load address of Palindrome
+    movq $Length, %rcx        # Reload length
+
+CopyLoop:
+    movb (%rdi), %al          # Load character from Original
+    movb %al, (%rdx)          # Copy to Palindrome
+    addq $1, %rdi             # Move to next character in Original
+    addq $1, %rdx             # Move to next character in Palindrome
+    subq $1, %rcx             # Decrement length counter
+    jnz CopyLoop              # Repeat if length != 0
+
+    movq $Reversed, %rdi      # Reset %rdi to Reversed
+    movq $Length, %rcx        # Reload length
+
+AppendLoop:
+    movb (%rdi), %al          # Load character from Reversed
+    movb %al, (%rdx)          # Append to Palindrome
+    addq $1, %rdi             # Move to next character in Reversed
+    addq $1, %rdx             # Move to next character in Palindrome
+    subq $1, %rcx             # Decrement length counter
+    jnz AppendLoop            # Repeat if length != 0
+
+    ret                       # Return

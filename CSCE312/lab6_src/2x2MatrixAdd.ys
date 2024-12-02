@@ -1,0 +1,29 @@
+# Matrix Addition: C = A + B
+# A, B, and C are 2x2 matrices stored in memory.
+
+    .pos 0
+A:  .quad 1, 2, 3, 4         # Matrix A
+B:  .quad 5, 6, 7, 8         # Matrix B
+C:  .quad 0, 0, 0, 0         # Result Matrix C
+
+# Start of program
+    .pos 64
+Main:
+    movq $A, %rdi             # Load address of A into %rdi
+    movq $B, %rsi             # Load address of B into %rsi
+    movq $C, %rdx             # Load address of C into %rdx
+    movq $4, %rcx             # Counter for 4 elements (matrix size)
+
+Loop:
+    movq (%rdi), %rax         # Load A[i] into %rax
+    addq (%rsi), %rax         # Add B[i] to %rax
+    movq %rax, (%rdx)         # Store result into C[i]
+
+    addq $8, %rdi             # Move to next element in A (8 bytes per quadword)
+    addq $8, %rsi             # Move to next element in B
+    addq $8, %rdx             # Move to next element in C
+
+    subq $1, %rcx             # Decrement counter
+    jnz Loop                  # If counter != 0, repeat loop
+
+    ret                       # Return

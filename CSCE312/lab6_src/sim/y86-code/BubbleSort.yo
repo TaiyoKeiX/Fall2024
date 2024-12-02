@@ -1,0 +1,45 @@
+                            | # Load the base address of the array into %rsi
+0x000: 30f6ffffffffffffffff | irmovq ARRAY_BASE, %rsi      # %rsi = base address of array
+                            | 
+                            | # Outer loop initialization: i = 0
+0x00a: 30f30000000000000000 | irmovq 0, %rbx               # %rbx = i (outer loop index)
+                            | 
+0x014:                      | OUTER_LOOP:                  # Label for outer loop
+                            |     # Load the array size N into %rcx and calculate n-i-1
+0x014: 30f1ffffffffffffffff |     irmovq N, %rcx           # %rcx = N
+0x01e: 6131                 |     subq %rbx, %rcx          # %rcx = N - i
+0x022: 718b00000000000000   |     jle DONE                 # If i >= N-1, exit the loop
+                            | 
+                            |     # Initialize inner loop index: j = 0
+0x02b: 30f20000000000000000 |     irmovq 0, %rdx           # %rdx = j (inner loop index)
+                            | 
+0x035:                      | INNER_LOOP:                  # Label for inner loop
+                            |     # Check if j >= n-i-1 by performing %rcx - %rdx
+0x035: 2010                 |     rrmovq %rcx, %rax        # Copy %rcx (n-i-1) into %rax
+0x037: 6120                 |     subq %rdx, %rax          # %rax = %rcx - %rdx
+0x039: 718000000000000000   |     jle OUTER_INCREMENT      # If %rcx <= %rdx, go to the next outer loop iteration
+                            | 
+                            |     # Load A[j] and A[j+1]
+0x056: 6180                 |     subq %r8, %rax                 # Compare A[j] - A[j+1]
+                            | 
+                            |     # If A[j] <= A[j+1], skip the swap
+0x058: 717500000000000000   |     jle NO_SWAP
+                            | 
+                            |     # Swap A[j] and A[j+1]
+0x061: 408f0000000000000000 |     rmmovq %r8, (%rsi, %rdx)       # Store A[j+1] into A[j]
+0x06b: 400f0000000000000000 |     rmmovq %rax, 8(%rsi, %rdx)     # Store A[j] into A[j+1]
+                            | 
+0x075:                      | NO_SWAP:                   # Label for skipping the swap
+                            |     # Increment j
+                            | 
+                            |     # Repeat inner loop
+0x077: 703500000000000000   |     jmp INNER_LOOP
+                            | 
+0x080:                      | OUTER_INCREMENT:           # Label for outer loop increment
+                            |     # Increment i
+                            |     # Repeat outer loop
+0x082: 701400000000000000   |     jmp OUTER_LOOP
+                            | 
+0x08b:                      | DONE:                      # Label for program end
+                            |     # End the program
+0x08b: 00                   |     halt

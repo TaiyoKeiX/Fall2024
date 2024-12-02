@@ -1,0 +1,50 @@
+# Load the base address of the array into %rsi
+irmovq ARRAY_BASE, %rsi      # %rsi = base address of array
+
+# Outer loop initialization: i = 0
+irmovq 0, %rbx               # %rbx = i (outer loop index)
+
+OUTER_LOOP:                  # Label for outer loop
+    # Load the array size N into %rcx and calculate n-i-1
+    irmovq N, %rcx           # %rcx = N
+    subq %rbx, %rcx          # %rcx = N - i
+    subq $1, %rcx            # %rcx = N - i - 1
+    jle DONE                 # If i >= N-1, exit the loop
+
+    # Initialize inner loop index: j = 0
+    irmovq 0, %rdx           # %rdx = j (inner loop index)
+
+INNER_LOOP:                  # Label for inner loop
+    # Check if j >= n-i-1 by performing %rcx - %rdx
+    rrmovq %rcx, %rax        # Copy %rcx (n-i-1) into %rax
+    subq %rdx, %rax          # %rax = %rcx - %rdx
+    jle OUTER_INCREMENT      # If %rcx <= %rdx, go to the next outer loop iteration
+
+    # Load A[j] and A[j+1]
+    mrmovq (%rsi, %rdx), %rax      # Load A[j] into %rax
+    mrmovq 8(%rsi, %rdx), %r8      # Load A[j+1] into %r8
+    subq %r8, %rax                 # Compare A[j] - A[j+1]
+
+    # If A[j] <= A[j+1], skip the swap
+    jle NO_SWAP
+
+    # Swap A[j] and A[j+1]
+    rmmovq %r8, (%rsi, %rdx)       # Store A[j+1] into A[j]
+    rmmovq %rax, 8(%rsi, %rdx)     # Store A[j] into A[j+1]
+
+NO_SWAP:                   # Label for skipping the swap
+    # Increment j
+    addq $8, %rdx                  # j++
+
+    # Repeat inner loop
+    jmp INNER_LOOP
+
+OUTER_INCREMENT:           # Label for outer loop increment
+    # Increment i
+    addq $1, %rbx                  # i++
+    # Repeat outer loop
+    jmp OUTER_LOOP
+
+DONE:                      # Label for program end
+    # End the program
+    halt

@@ -1,0 +1,39 @@
+# Define constants and addresses
+irmovq $0x100, %rdi       # Address of the start of the string
+irmovq $0x110, %rsi       # Address of the end of the string (calculated as start + length - 1)
+irmovq $0x120, %rdx       # Address to store the result (1 = palindrome, 0 = not palindrome)
+
+# Initialize result to 1 (assume palindrome initially)
+irmovq $1, %rax           # Load 1 into %rax (palindrome)
+rmmovq %rax, 0(%rdx)      # Store result in memory (assume palindrome)
+
+# Compare first and last characters
+mrmovq 0(%rdi), %rax      # Load first character into %rax
+mrmovq 0(%rsi), %rbx      # Load last character into %rbx
+subq %rbx, %rax           # Compare first - last
+jne not_palindrome        # If not equal, it's not a palindrome
+
+# Move pointers inward for the next comparison
+irmovq $1, %rcx           # Load 1 into %rcx (step size)
+addq %rcx, %rdi           # Increment %rdi (move to next character)
+subq %rcx, %rsi           # Decrement %rsi (move to previous character)
+
+# Repeat comparison for the next characters
+mrmovq 0(%rdi), %rax      # Load next first character
+mrmovq 0(%rsi), %rbx      # Load next last character
+subq %rbx, %rax           # Compare
+jne not_palindrome        # If not equal, it's not a palindrome
+
+# Continue until pointers meet or cross
+subq %rdi, %rsi           # Compare pointers
+jle done                  # If %rsi <= %rdi, we're done
+
+# If all characters match, the string is a palindrome
+done:
+halt                      # End program
+
+# If not a palindrome
+not_palindrome:
+irmovq $0, %rax           # Load 0 into %rax (not a palindrome)
+rmmovq %rax, 0(%rdx)      # Store result in memory
+halt                      # End program

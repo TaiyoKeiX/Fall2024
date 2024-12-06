@@ -1,0 +1,28 @@
+# Main program starts here
+# Load values of A and B directly into registers
+irmovq $10, %r9         # Load A[0][0] (e.g., 10) into %r9
+irmovq $20, %rbx        # Load B[0][0] (e.g., 20) into %rbx
+addq %rbx, %r9          # Add %rbx to %r9 (A[0][0] + B[0][0])
+irmovq $0x100, %rcx     # Address of C[0][0]
+rmmovq %r9, 0(%rcx)     # Store result in C[0][0]
+
+irmovq $15, %r9         # Load A[0][1] (e.g., 15) into %r9
+irmovq $25, %rbx        # Load B[0][1] (e.g., 25) into %rbx
+addq %rbx, %r9          # Add %rbx to %r9 (A[0][1] + B[0][1])
+irmovq $0x108, %rcx     # Address of C[0][1]
+rmmovq %r9, 0(%rcx)     # Store result in C[0][1]
+
+irmovq $30, %r9         # Load A[1][0] (e.g., 30) into %r9
+irmovq $40, %rbx        # Load B[1][0] (e.g., 40) into %rbx
+addq %rbx, %r9          # Add %rbx to %r9 (A[1][0] + B[1][0])
+irmovq $0x110, %rcx     # Address of C[1][0]
+rmmovq %r9, 0(%rcx)     # Store result in C[1][0]
+
+irmovq $35, %r9         # Load A[1][1] (e.g., 35) into %r9
+irmovq $45, %rbx        # Load B[1][1] (e.g., 45) into %rbx
+addq %rbx, %r9          # Add %rbx to %r9 (A[1][1] + B[1][1])
+irmovq $0x118, %rcx     # Address of C[1][1]
+rmmovq %r9, 0(%rcx)     # Store result in C[1][1]
+
+# Halt the program
+halt

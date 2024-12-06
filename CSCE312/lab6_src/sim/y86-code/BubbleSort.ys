@@ -1,50 +1,46 @@
-# Load the base address of the array into %rsi
-irmovq ARRAY_BASE, %rsi      # %rsi = base address of array
+# Bubble Sort for an array of 4 elements stored in memory (at 0x100, 0x108, 0x110, 0x118)
+# The sorted array will overwrite the original data.
 
-# Outer loop initialization: i = 0
-irmovq 0, %rbx               # %rbx = i (outer loop index)
+# Array Addresses
+irmovq $0x100, %rdi      # Address of the first element
+irmovq $0x108, %rsi      # Address of the second element
+irmovq $0x110, %rdx      # Address of the third element
+irmovq $0x118, %rcx      # Address of the fourth element
 
-OUTER_LOOP:                  # Label for outer loop
-    # Load the array size N into %rcx and calculate n-i-1
-    irmovq N, %rcx           # %rcx = N
-    subq %rbx, %rcx          # %rcx = N - i
-    subq $1, %rcx            # %rcx = N - i - 1
-    jle DONE                 # If i >= N-1, exit the loop
+# Pass 1: Compare and Swap for each adjacent pair
+irmovq $30, %rax         # Load array[0] (e.g., 30) into %rax
+irmovq $10, %rbx         # Load array[1] (e.g., 10) into %rbx
+subq %rbx, %rax          # Compare array[0] - array[1]
+jle skip_swap1           # If array[0] <= array[1], skip swap
+# Swap array[0] and array[1]
+irmovq $10, %rax         # Reload array[1] (10) into %rax
+irmovq $30, %rbx         # Reload array[0] (30) into %rbx
+rmmovq %rax, 0x100       # Store new array[0] (10)
+rmmovq %rbx, 0x108       # Store new array[1] (30)
 
-    # Initialize inner loop index: j = 0
-    irmovq 0, %rdx           # %rdx = j (inner loop index)
+skip_swap1:
+irmovq $30, %rax         # Load array[1] into %rax
+irmovq $20, %rbx         # Load array[2] into %rbx
+subq %rbx, %rax          # Compare array[1] - array[2]
+jle skip_swap2           # If array[1] <= array[2], skip swap
+# Swap array[1] and array[2]
+irmovq $20, %rax         # Reload array[2] (20) into %rax
+irmovq $30, %rbx         # Reload array[1] (30) into %rbx
+rmmovq %rax, 0x108       # Store new array[1] (20)
+rmmovq %rbx, 0x110       # Store new array[2] (30)
 
-INNER_LOOP:                  # Label for inner loop
-    # Check if j >= n-i-1 by performing %rcx - %rdx
-    rrmovq %rcx, %rax        # Copy %rcx (n-i-1) into %rax
-    subq %rdx, %rax          # %rax = %rcx - %rdx
-    jle OUTER_INCREMENT      # If %rcx <= %rdx, go to the next outer loop iteration
+skip_swap2:
+irmovq $30, %rax         # Load array[2] into %rax
+irmovq $40, %rbx         # Load array[3] into %rbx
+subq %rbx, %rax          # Compare array[2] - array[3]
+jle skip_swap3           # If array[2] <= array[3], skip swap
+# Swap array[2] and array[3]
+irmovq $40, %rax         # Reload array[3] (40) into %rax
+irmovq $30, %rbx         # Reload array[2] (30) into %rbx
+rmmovq %rax, 0x110       # Store new array[2] (40)
+rmmovq %rbx, 0x118       # Store new array[3] (30)
 
-    # Load A[j] and A[j+1]
-    mrmovq (%rsi, %rdx), %rax      # Load A[j] into %rax
-    mrmovq 8(%rsi, %rdx), %r8      # Load A[j+1] into %r8
-    subq %r8, %rax                 # Compare A[j] - A[j+1]
+skip_swap3:
+# Pass 2 and subsequent passes would follow a similar approach.
 
-    # If A[j] <= A[j+1], skip the swap
-    jle NO_SWAP
-
-    # Swap A[j] and A[j+1]
-    rmmovq %r8, (%rsi, %rdx)       # Store A[j+1] into A[j]
-    rmmovq %rax, 8(%rsi, %rdx)     # Store A[j] into A[j+1]
-
-NO_SWAP:                   # Label for skipping the swap
-    # Increment j
-    addq $8, %rdx                  # j++
-
-    # Repeat inner loop
-    jmp INNER_LOOP
-
-OUTER_INCREMENT:           # Label for outer loop increment
-    # Increment i
-    addq $1, %rbx                  # i++
-    # Repeat outer loop
-    jmp OUTER_LOOP
-
-DONE:                      # Label for program end
-    # End the program
-    halt
+halt

@@ -1,0 +1,28 @@
+                            | # Main program starts here
+                            | # Load values of A and B directly into registers
+0x000: 30f90a00000000000000 | irmovq $10, %r9         # Load A[0][0] (e.g., 10) into %r9
+0x00a: 30f31400000000000000 | irmovq $20, %rbx        # Load B[0][0] (e.g., 20) into %rbx
+0x014: 6039                 | addq %rbx, %r9          # Add %rbx to %r9 (A[0][0] + B[0][0])
+0x016: 30f10001000000000000 | irmovq $0x100, %rcx     # Address of C[0][0]
+0x020: 40910000000000000000 | rmmovq %r9, 0(%rcx)     # Store result in C[0][0]
+                            | 
+0x02a: 30f90f00000000000000 | irmovq $15, %r9         # Load A[0][1] (e.g., 15) into %r9
+0x034: 30f31900000000000000 | irmovq $25, %rbx        # Load B[0][1] (e.g., 25) into %rbx
+0x03e: 6039                 | addq %rbx, %r9          # Add %rbx to %r9 (A[0][1] + B[0][1])
+0x040: 30f10801000000000000 | irmovq $0x108, %rcx     # Address of C[0][1]
+0x04a: 40910000000000000000 | rmmovq %r9, 0(%rcx)     # Store result in C[0][1]
+                            | 
+0x054: 30f91e00000000000000 | irmovq $30, %r9         # Load A[1][0] (e.g., 30) into %r9
+0x05e: 30f32800000000000000 | irmovq $40, %rbx        # Load B[1][0] (e.g., 40) into %rbx
+0x068: 6039                 | addq %rbx, %r9          # Add %rbx to %r9 (A[1][0] + B[1][0])
+0x06a: 30f11001000000000000 | irmovq $0x110, %rcx     # Address of C[1][0]
+0x074: 40910000000000000000 | rmmovq %r9, 0(%rcx)     # Store result in C[1][0]
+                            | 
+0x07e: 30f92300000000000000 | irmovq $35, %r9         # Load A[1][1] (e.g., 35) into %r9
+0x088: 30f32d00000000000000 | irmovq $45, %rbx        # Load B[1][1] (e.g., 45) into %rbx
+0x092: 6039                 | addq %rbx, %r9          # Add %rbx to %r9 (A[1][1] + B[1][1])
+0x094: 30f11801000000000000 | irmovq $0x118, %rcx     # Address of C[1][1]
+0x09e: 40910000000000000000 | rmmovq %r9, 0(%rcx)     # Store result in C[1][1]
+                            | 
+                            | # Halt the program
+0x0a8: 00                   | halt

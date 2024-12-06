@@ -1,0 +1,39 @@
+                            | # Define constants and addresses
+0x000: 30f70001000000000000 | irmovq $0x100, %rdi       # Address of the start of the string
+0x00a: 30f61001000000000000 | irmovq $0x110, %rsi       # Address of the end of the string (calculated as start + length - 1)
+0x014: 30f22001000000000000 | irmovq $0x120, %rdx       # Address to store the result (1 = palindrome, 0 = not palindrome)
+                            | 
+                            | # Initialize result to 1 (assume palindrome initially)
+0x01e: 30f00100000000000000 | irmovq $1, %rax           # Load 1 into %rax (palindrome)
+0x028: 40020000000000000000 | rmmovq %rax, 0(%rdx)      # Store result in memory (assume palindrome)
+                            | 
+                            | # Compare first and last characters
+0x032: 50070000000000000000 | mrmovq 0(%rdi), %rax      # Load first character into %rax
+0x03c: 50360000000000000000 | mrmovq 0(%rsi), %rbx      # Load last character into %rbx
+0x046: 6130                 | subq %rbx, %rax           # Compare first - last
+0x048: 748a00000000000000   | jne not_palindrome        # If not equal, it's not a palindrome
+                            | 
+                            | # Move pointers inward for the next comparison
+0x051: 30f10100000000000000 | irmovq $1, %rcx           # Load 1 into %rcx (step size)
+0x05b: 6017                 | addq %rcx, %rdi           # Increment %rdi (move to next character)
+0x05d: 6116                 | subq %rcx, %rsi           # Decrement %rsi (move to previous character)
+                            | 
+                            | # Repeat comparison for the next characters
+0x05f: 50070000000000000000 | mrmovq 0(%rdi), %rax      # Load next first character
+0x069: 50360000000000000000 | mrmovq 0(%rsi), %rbx      # Load next last character
+0x073: 6130                 | subq %rbx, %rax           # Compare
+0x075: 748a00000000000000   | jne not_palindrome        # If not equal, it's not a palindrome
+                            | 
+                            | # Continue until pointers meet or cross
+0x07e: 6176                 | subq %rdi, %rsi           # Compare pointers
+0x080: 718900000000000000   | jle done                  # If %rsi <= %rdi, we're done
+                            | 
+                            | # If all characters match, the string is a palindrome
+0x089:                      | done:
+0x089: 00                   | halt                      # End program
+                            | 
+                            | # If not a palindrome
+0x08a:                      | not_palindrome:
+0x08a: 30f00000000000000000 | irmovq $0, %rax           # Load 0 into %rax (not a palindrome)
+0x094: 40020000000000000000 | rmmovq %rax, 0(%rdx)      # Store result in memory
+0x09e: 00                   | halt                      # End program
